@@ -6,7 +6,8 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib && tsc -p ./tsconfig.build.json",
-    "start": "nodemon --config nodemon.json",
+    "start": "concurrently \"tsc --watch -p ./tsconfig.build.json\" \"cd example && npm run start\"",
+    "start:example": "cd example && npm run start",
     "test": "jest",
     "test-coverage": "jest --collectCoverage",
     "preversion": "npm run format && npm run lint && npm run test",
@@ -45,6 +46,7 @@
     "@types/node": "^14.0.14",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
+    "concurrently": "^7.6.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.15.0",
     "husky": "^4.3.0",
