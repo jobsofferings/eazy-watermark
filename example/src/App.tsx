@@ -1,5 +1,5 @@
 import React from 'react';
-import { createWaterMark } from 'watermark';
+import { createWm, createWmSingle } from 'watermark';
 import styles from './index.module.less';
 import './App.less';
 
@@ -13,12 +13,23 @@ const App: React.FunctionComponent<OpenAppProps> = () => {
       <button
         className={styles.btn}
         onClick={() => {
-          hiddenRef.current = createWaterMark({
-            text: 'Jobs 1999'
+          hiddenRef.current = createWmSingle({
+            text: 'single 1999'
           });
         }}
       >
-        basic watermark
+        single watermark
+      </button>
+      <button
+        className={styles.btn}
+        onClick={() => {
+          hiddenRef.current = createWm({
+            text: 'repeat 1999',
+            repeat: 5,
+          });
+        }}
+      >
+        repeat watermark
       </button>
       <button
         className={styles.btn}
