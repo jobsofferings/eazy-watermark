@@ -5,24 +5,23 @@ import './App.less';
 
 export interface OpenAppProps { }
 
-const App: React.FunctionComponent<OpenAppProps> = (props) => {
+const App: React.FunctionComponent<OpenAppProps> = () => {
   const hiddenRef = React.useRef<any>(null);
 
   return (
     <div className={styles.btn_area}>
       <button
-         className={styles.btn}
+        className={styles.btn}
         onClick={() => {
           hiddenRef.current = createWaterMark({
-            phone: '12312341234',
-            name: 'jobsofferings',
+            text: 'Jobs 1999'
           });
         }}
       >
         basic watermark
       </button>
       <button
-         className={styles.btn}
+        className={styles.btn}
         onClick={() => {
           console.log(hiddenRef.current);
           hiddenRef.current?.();

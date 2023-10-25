@@ -1,10 +1,3 @@
-const generateContent = (name: string, phone: string, email: string) => {
-  if (phone) {
-    return name + " " + phone.slice(-4)
-  }
-  const index = email.indexOf('@');
-  return name + " " + email.slice(0, index)
-}
 const createWm = ({
   container = document.body,
   width = '300px',
@@ -13,9 +6,7 @@ const createWm = ({
   textBaseline = 'middle',
   font = "12px Microsoft Yahei",
   fillStyle = 'rgba(185, 193, 202, 0.15)',
-  name = '',
-  phone = "",
-  email = "",
+  text = "",
   rotate = -20,
   zIndex = 10000,
   top = "0px",
@@ -31,7 +22,7 @@ const createWm = ({
   ctx.fillStyle = fillStyle;
 
   ctx.rotate(rotate * Math.PI / 180);
-  ctx.fillText(generateContent(name, phone, email), parseFloat(width) / 2, parseFloat(height) / 2);
+  ctx.fillText(text, parseFloat(width) / 2, parseFloat(height) / 2);
 
   const base64Url = canvas.toDataURL();
   const __wm = document.querySelector(`.__wm${top}_${left}`);
@@ -64,9 +55,9 @@ const createWm = ({
   }
 }
 
-const KEY = '$$ALIVIA_WATHER_MARK_DESTORY_FN$$';
+const KEY = '__EAZY_WATHERMARK_DESTORY__';
 
-const createDestoryFN = (fn: any) => {
+const createDestoryFN = (fn: () => void) => {
   // @ts-ignore
   window[KEY] = () => {
     fn();
@@ -91,15 +82,13 @@ const createWaterMark = ({
   textBaseline = 'middle',
   font = "13px Microsoft Yahei",
   fillStyle = 'rgba(185, 193, 202, 0.2)',
-  name = '',
-  phone = "",
-  email = "",
+  text = '',
   rotate = -20,
   zIndex = 10000,
 } = {}) => {
   emitDestoryFN();
 
-  const cb1 = createWm({
+  const callback = createWm({
     container,
     width,
     height,
@@ -107,14 +96,12 @@ const createWaterMark = ({
     textBaseline,
     font,
     fillStyle,
-    name,
-    phone,
-    email,
+    text,
     rotate,
     zIndex,
   })
 
-  const cb2 = createWm({
+  const callback2 = createWm({
     container,
     width,
     height,
@@ -122,22 +109,20 @@ const createWaterMark = ({
     textBaseline,
     font,
     fillStyle,
-    name,
-    phone,
-    email,
+    text,
     rotate,
     zIndex,
-    top: "150px",
-    left: "150px",
+    top: '150px',
+    left: '150px',
   })
 
   createDestoryFN(() => {
-    cb1()
-    cb2()
+    callback()
+    callback2()
   })
 
   return () => {
-    // emitDestoryFN();
+    emitDestoryFN();
   }
 }
 
