@@ -1,3 +1,18 @@
+export interface CreateWmSingleProps {
+  container?: HTMLElement;
+  width?: number;
+  height?: number;
+  textAlign?: CanvasTextAlign;
+  textBaseline?: CanvasTextBaseline;
+  font?: string;
+  fillStyle?: string | CanvasGradient | CanvasPattern;
+  text?: string;
+  rotate?: number;
+  zIndex?: number;
+  top?: string;
+  left?: string;
+}
+
 export const createWmSingle = ({
   container = document.body,
   width = 300,

@@ -1,4 +1,4 @@
-import { createWmSingle } from "./createWmSingle";
+import { createWmSingle, CreateWmSingleProps } from "./createWmSingle";
 
 const KEY = '__EAZY_WATHERMARK_DESTORY__';
 
@@ -17,6 +17,10 @@ const emitDestoryFN = () => {
     // @ts-ignore
     window[KEY]();
   }
+}
+
+interface CreateWmProps extends CreateWmSingleProps {
+  repeat?: number;
 }
 
 const createWm = ({
@@ -65,4 +69,6 @@ const createWm = ({
 export {
   createWm,
   createWmSingle,
+  CreateWmProps,
+  CreateWmSingleProps,
 }
