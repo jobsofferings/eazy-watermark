@@ -13,3 +13,5 @@ coverage/
 .vscode
 *.log
 
+./package-lock.json
+./yarn.lock

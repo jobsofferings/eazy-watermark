@@ -8,11 +8,16 @@ export interface OpenAppProps { }
 const App: React.FunctionComponent<OpenAppProps> = () => {
   const hiddenRef = React.useRef<any>(null);
 
+  const clearWM = () => {
+    hiddenRef.current?.();
+  }
+
   return (
     <div className={styles.btn_area}>
       <button
         className={styles.btn}
         onClick={() => {
+          clearWM();
           hiddenRef.current = createWmSingle({
             text: 'single 1999'
           });
@@ -23,20 +28,18 @@ const App: React.FunctionComponent<OpenAppProps> = () => {
       <button
         className={styles.btn}
         onClick={() => {
+          clearWM();
           hiddenRef.current = createWm({
             text: 'repeat 1999',
             repeat: 5,
           });
         }}
       >
-        repeat watermark
+        repeat watermark (5)
       </button>
       <button
         className={styles.btn}
-        onClick={() => {
-          console.log(hiddenRef.current);
-          hiddenRef.current?.();
-        }}
+        onClick={clearWM}
       >
         remove watermark
       </button>
