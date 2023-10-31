@@ -1,11 +1,11 @@
-export interface CreateWmSingleProps {
+export interface DefaultCreateWmProps {
   container?: HTMLElement;
   width?: number;
   height?: number;
   textAlign?: CanvasTextAlign;
   textBaseline?: CanvasTextBaseline;
   font?: string;
-  fillStyle?: string | CanvasGradient | CanvasPattern;
+  fillStyle?: string | CanvasGradient | CanvasPattern | undefined;
   text?: string;
   rotate?: number;
   zIndex?: number;
@@ -13,7 +13,7 @@ export interface CreateWmSingleProps {
   left?: string;
 }
 
-export const createWmSingle = ({
+export const defaultCreateWm = ({
   container = document.body,
   width = 300,
   height = 300,
@@ -26,7 +26,7 @@ export const createWmSingle = ({
   zIndex = 10000,
   top = "0px",
   left = "0px",
-} = {}) => {
+}: DefaultCreateWmProps = {}) => {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('width', `${width}px`);
   canvas.setAttribute('height', `${height}px`);
@@ -69,3 +69,79 @@ export const createWmSingle = ({
     watermarkDiv.remove()
   }
 }
+
+export interface CreateWmImageProps extends DefaultCreateWmProps {
+  image: string;
+}
+
+export const createImageWm = async ({
+  container = document.body,
+  width = 300,
+  height = 300,
+  rotate = 0,
+  zIndex = 10000,
+  top = "0px",
+  left = "0px",
+  bottom = "0px",
+  right = "0px",
+  image = 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~80x80.awebp',
+} = {}) => {
+  const canvas = document.createElement('canvas');
+  canvas.setAttribute('width', `${width}px`);
+  canvas.setAttribute('height', `${height}px`);
+  const ctx = canvas.getContext("2d")!;
+
+  // 创建一个 Promise 来等待图像加载完成
+  const loadImage = (url: string) => new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = url;
+    img.width = width;
+    img.height = height;
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+  });
+
+  try {
+    const img = await loadImage(image);
+
+    ctx.save();
+    ctx.globalAlpha = 0.3;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.rotate(rotate * (Math.PI / 180));
+    ctx.drawImage(img as HTMLImageElement, 0, 0, width, height);
+    ctx.restore();
+
+    const base64Url = canvas.toDataURL();
+    const watermarkDiv = document.createElement("div");
+    watermarkDiv.setAttribute('style', `
+      position: fixed;
+      z-index: ${zIndex};
+      pointer-events: none;
+      background-repeat: no-repeat;
+      background-image: url('${base64Url}');
+      width: ${width}px;
+      height: ${height}px;
+      top: ${top};
+      left: ${left};
+      bottom: ${bottom};
+      right: ${right};
+    `);
+    watermarkDiv.classList.add('watermark');
+
+    if (!document.querySelector('.watermark')) {
+      container.style.position = 'relative';
+      container.insertBefore(watermarkDiv, container.firstChild);
+    }
+
+    return () => {
+      const existingWatermark = document.querySelector('.watermark');
+      if (existingWatermark) {
+        existingWatermark.remove();
+      }
+    };
+  } catch (error) {
+    console.error("Error loading image:", error);
+    return () => {};
+  }
+};

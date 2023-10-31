@@ -1,4 +1,4 @@
-import { createWmSingle, CreateWmSingleProps } from "./createWmSingle";
+import { createImageWm, defaultCreateWm, DefaultCreateWmProps } from "./createWmSingle";
 
 const KEY = '__EAZY_WATHERMARK_DESTORY__';
 
@@ -19,7 +19,7 @@ const emitDestoryFN = () => {
   }
 }
 
-interface CreateWmProps extends CreateWmSingleProps {
+interface CreateWmProps extends DefaultCreateWmProps {
   repeat?: number;
 }
 
@@ -29,17 +29,17 @@ const createWm = ({
   height = 300,
   textAlign = 'center',
   textBaseline = 'middle',
-  font = "13px Microsoft Yahei",
+  font = '13px Microsoft Yahei',
   fillStyle = 'rgba(185, 193, 202, 0.2)',
   text = '',
   rotate = -20,
   zIndex = 10000,
   repeat = 1,
-} = {}) => {
-  emitDestoryFN();
+}: CreateWmProps = {}) => {
+  emitDestoryFN()
 
   const callbackFnList = new Array(repeat).fill(true).map((item, index) => {
-    return createWmSingle({
+    return defaultCreateWm({
       container,
       width,
       height,
@@ -53,22 +53,54 @@ const createWm = ({
       top: `${index * (height / repeat)}px`,
       left: `${index * (width / repeat)}px`,
     })
-  });
+  })
 
   createDestoryFN(() => {
     callbackFnList.map((fn) => {
-      fn();
+      fn()
     })
   })
 
   return () => {
-    emitDestoryFN();
+    emitDestoryFN()
+  }
+}
+
+const createWmSingle = ({
+  container = document.body,
+  width = 300,
+  height = 300,
+  textAlign = 'center',
+  textBaseline = 'middle',
+  font = "13px Microsoft Yahei",
+  fillStyle = 'rgba(185, 193, 202, 0.2)',
+  text = '',
+  rotate = -20,
+  zIndex = 10000,
+}: DefaultCreateWmProps = {}) => {
+
+  const destroy = defaultCreateWm({
+    container,
+    width,
+    height,
+    textAlign,
+    textBaseline,
+    font,
+    fillStyle,
+    text,
+    rotate,
+    zIndex,
+  })
+
+  return () => {
+    destroy();
   }
 }
 
 export {
   createWm,
   createWmSingle,
+  createImageWm,
   CreateWmProps,
-  CreateWmSingleProps,
+  DefaultCreateWmProps,
 }

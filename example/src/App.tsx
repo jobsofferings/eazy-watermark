@@ -1,5 +1,5 @@
 import React from 'react';
-import { createWm, createWmSingle } from 'watermark';
+import { createWm, createWmSingle, createImageWm } from 'watermark';
 import styles from './index.module.less';
 import './App.less';
 
@@ -36,6 +36,19 @@ const App: React.FunctionComponent<OpenAppProps> = () => {
         }}
       >
         repeat watermark (5)
+      </button>
+      <button
+        className={styles.btn}
+        onClick={() => {
+          clearWM();
+          createImageWm({
+            image: 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~80x80.awebp'
+          }).then((destroy: any) => {
+            hiddenRef.current = destroy
+          })
+        }}
+      >
+        image watermark
       </button>
       <button
         className={styles.btn}
