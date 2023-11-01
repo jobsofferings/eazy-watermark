@@ -7,6 +7,10 @@
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "scripts": {
     "build": "rm -rf lib && tsc -p ./tsconfig.build.json",
     "start": "concurrently \"tsc --watch -p ./tsconfig.build.json\" \"cd example && npm run start\"",
