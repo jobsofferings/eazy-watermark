@@ -1,14 +1,17 @@
-export interface DefaultCreateWmProps {
+export interface BaseCreateWmProps {
   container?: HTMLElement;
   width?: number;
   height?: number;
+  zIndex?: number;
+}
+
+export interface DefaultCreateWmProps extends BaseCreateWmProps {
   textAlign?: CanvasTextAlign;
   textBaseline?: CanvasTextBaseline;
   font?: string;
-  fillStyle?: string | CanvasGradient | CanvasPattern | undefined;
+  fillStyle?: string | CanvasGradient | CanvasPattern;
   text?: string;
   rotate?: number;
-  zIndex?: number;
   top?: string;
   left?: string;
 }
@@ -74,18 +77,35 @@ export interface CreateWmImageProps extends DefaultCreateWmProps {
   image: string;
 }
 
+export interface CreateImageWmProps extends BaseCreateWmProps {
+  rotate?: number;
+  position?: 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom';
+  positionOffset?: {
+    top?: string;
+    left?: string;
+    bottom?: string;
+    right?: string;
+  }
+  image?: string;
+  imageClass?: string;
+}
+
 export const createImageWm = async ({
   container = document.body,
   width = 300,
   height = 300,
   rotate = 0,
   zIndex = 10000,
-  top = "0px",
-  left = "0px",
-  bottom = "0px",
-  right = "0px",
-  image = 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~80x80.awebp',
-} = {}) => {
+  position = 'right-bottom',
+  positionOffset = {
+    right: '24px',
+    bottom: '24px',
+    left: '24px',
+    top: '24px',
+  },
+  image = 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~300x300.awebp',
+  imageClass = '',
+}: CreateImageWmProps = {}) => {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('width', `${width}px`);
   canvas.setAttribute('height', `${height}px`);
@@ -94,10 +114,11 @@ export const createImageWm = async ({
   // 创建一个 Promise 来等待图像加载完成
   const loadImage = (url: string) => new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = url;
-    img.width = width;
-    img.height = height;
+    img.crossOrigin = 'anonymous'
+    img.src = url
+    img.setAttribute('class', `watermark-image ${imageClass}`)
+    img.width = width
+    img.height = height
     img.onload = () => resolve(img);
     img.onerror = reject;
   });
@@ -114,6 +135,9 @@ export const createImageWm = async ({
 
     const base64Url = canvas.toDataURL();
     const watermarkDiv = document.createElement("div");
+
+    const positionStr = getWatermarkPosition(position, positionOffset);
+
     watermarkDiv.setAttribute('style', `
       position: fixed;
       z-index: ${zIndex};
@@ -122,10 +146,7 @@ export const createImageWm = async ({
       background-image: url('${base64Url}');
       width: ${width}px;
       height: ${height}px;
-      top: ${top};
-      left: ${left};
-      bottom: ${bottom};
-      right: ${right};
+      ${positionStr}
     `);
     watermarkDiv.classList.add('watermark');
 
@@ -145,3 +166,26 @@ export const createImageWm = async ({
     return () => {};
   }
 };
+
+const getWatermarkPosition = (
+  position: 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom',
+  positionOffset: {
+    top?: string
+    left?: string
+    bottom?: string
+    right?: string
+  },
+) => {
+  const [x, y] = position.split('-')
+  let { top, left, bottom, right } = positionOffset
+  right = x === 'right' ? right : undefined
+  left = x === 'left' ? left : undefined
+  top = y === 'top' ? top : undefined
+  bottom = y === 'bottom' ? bottom : undefined
+  return `
+    ${top ? `top: ${top};` : ''}
+    ${left ? `left: ${left};` : ''}
+    ${bottom ? `bottom: ${bottom};` : ''}
+    ${right ? `right: ${right};` : ''}
+  `
+}

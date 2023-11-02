@@ -42,7 +42,7 @@ const App: React.FunctionComponent<OpenAppProps> = () => {
         onClick={() => {
           clearWM();
           createImageWm({
-            image: 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~80x80.awebp'
+            image: 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~300x300.awebp',
           }).then((destroy: any) => {
             hiddenRef.current = destroy
           })
