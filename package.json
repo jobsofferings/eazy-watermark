@@ -1,6 +1,6 @@
 {
   "name": "eazy-watermark",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Eazy Watermark：A watermark tool for browser",
   "author": "jobsofferings",
   "repository": "https://github.com/jobsofferings/eazy-watermark",
@@ -37,9 +37,6 @@
     "typescript",
     "browser"
   ],
-  "engines": {
-    "node": "12.19.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
