@@ -1,1 +1,0 @@
-### eazy-watermark-examples

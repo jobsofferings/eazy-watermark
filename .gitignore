@@ -15,3 +15,7 @@ coverage/
 
 ./package-lock.json
 ./yarn.lock
+
+# dumi
+.dumi/tmp*
+src/.umi
