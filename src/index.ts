@@ -1,22 +1,34 @@
 import { createImageWm, defaultCreateWm, DefaultCreateWmProps } from "./createWmSingle";
+import { generateUniqueId } from "./utils";
 
-const KEY = '__EAZY_WATHERMARK_DESTORY__';
+interface DestroyFunctionsProps {
+  [x: string]: () => void
+}
 
-const createDestoryFN = (fn: () => void) => {
-  // @ts-ignore
-  window[KEY] = () => {
-    fn();
-    // @ts-ignore
-    delete window[KEY];
+let destroyFunctions: DestroyFunctionsProps = {}
+const createDestoryFN = (id: string, fn: () => void) => {
+  const key = `__EAZY_WATHERMARK_DESTORY_${id}__`
+
+  destroyFunctions[key] = () => {
+    fn()
+    delete destroyFunctions[key]
   }
 }
 
-const emitDestoryFN = () => {
-  // @ts-ignore
-  if (typeof window[KEY] === 'function') {
-    // @ts-ignore
-    window[KEY]();
+const emitDestoryFN = (id?: string) => {
+  if (id) {
+    const key = `__EAZY_WATHERMARK_DESTORY_${id}__`;
+    if (destroyFunctions[key]) {
+      destroyFunctions[key]();
+    }
+  } else {
+    Object.values(destroyFunctions).forEach(fn => fn());
+    destroyFunctions = {};
   }
+};
+
+const removeAll = () => {
+  emitDestoryFN();
 }
 
 interface CreateWmProps extends DefaultCreateWmProps {
@@ -36,7 +48,10 @@ const createWm = ({
   zIndex = 10000,
   repeat = 1,
 }: CreateWmProps = {}) => {
-  emitDestoryFN()
+
+  const instanceId = generateUniqueId();
+
+  emitDestoryFN(instanceId);
 
   const callbackFnList = new Array(repeat).fill(true).map((item, index) => {
     return defaultCreateWm({
@@ -55,15 +70,15 @@ const createWm = ({
     })
   })
 
-  createDestoryFN(() => {
-    callbackFnList.map((fn) => {
-      fn()
-    })
-  })
+  console.log(instanceId ,'instanceId')
+
+  createDestoryFN(instanceId, () => {
+    callbackFnList.forEach(fn => fn());
+  });
 
   return () => {
-    emitDestoryFN()
-  }
+    emitDestoryFN(instanceId);
+  };
 }
 
 const createWmSingle = ({
@@ -101,6 +116,7 @@ export {
   createWm,
   createWmSingle,
   createImageWm,
+  removeAll,
   CreateWmProps,
   DefaultCreateWmProps,
 }

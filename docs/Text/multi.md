@@ -1,0 +1,1 @@
+<code src="./multi.tsx"></code>

@@ -2,11 +2,7 @@ import React from 'react';
 import { createWmSingle } from '../../src/index';
 import '../styles/index.less';
 
-interface CreateWmSingleProps {
-
-}
-
-const CreateWmSingle = ({ }: CreateWmSingleProps) => {
+const CreateWmSingle = () => {
 
   const hiddenRef = React.useRef<any>(null);
 
@@ -21,7 +17,7 @@ const CreateWmSingle = ({ }: CreateWmSingleProps) => {
         onClick={() => {
           clearWM()
           hiddenRef.current = createWmSingle({
-            text: 'Single Watermark'
+            text: 'Single'
           });
         }}
       >
