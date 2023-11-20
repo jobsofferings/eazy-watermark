@@ -32,7 +32,7 @@ const removeAll = () => {
 }
 
 interface CreateWmProps extends DefaultCreateWmProps {
-  repeat?: number;
+  repeat?: number; 
 }
 
 const createWm = ({
@@ -47,6 +47,8 @@ const createWm = ({
   rotate = -20,
   zIndex = 10000,
   repeat = 1,
+  onCreated,
+  onDestory,
 }: CreateWmProps = {}) => {
 
   const instanceId = generateUniqueId();
@@ -70,14 +72,14 @@ const createWm = ({
     })
   })
 
-  console.log(instanceId ,'instanceId')
-
   createDestoryFN(instanceId, () => {
     callbackFnList.forEach(fn => fn());
+    onCreated && onCreated();
   });
 
   return () => {
     emitDestoryFN(instanceId);
+    onDestory && onDestory();
   };
 }
 
@@ -92,6 +94,8 @@ const createWmSingle = ({
   text = '',
   rotate = -20,
   zIndex = 10000,
+  onCreated,
+  onDestory,
 }: DefaultCreateWmProps = {}) => {
 
   const destroy = defaultCreateWm({
@@ -107,8 +111,11 @@ const createWmSingle = ({
     zIndex,
   })
 
+  onCreated && onCreated();
+
   return () => {
     destroy();
+    onDestory && onDestory();
   }
 }
 

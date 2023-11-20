@@ -14,6 +14,8 @@ export interface DefaultCreateWmProps extends BaseCreateWmProps {
   rotate?: number;
   top?: string;
   left?: string;
+  onCreated?: () => void;
+  onDestory?: () => void;
 }
 
 export const defaultCreateWm = ({
