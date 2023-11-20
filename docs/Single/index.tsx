@@ -1,6 +1,6 @@
 import React from 'react';
 import { createWmSingle } from '../../src/index';
-import styles from '../styles/index.module.less';
+import '../styles/index.less';
 
 interface CreateWmSingleProps {
 
@@ -15,9 +15,9 @@ const CreateWmSingle = ({ }: CreateWmSingleProps) => {
   }
 
   return (
-    <div className={styles.btn_area}>
+    <div className='button-area'>
       <button
-        className={styles.btn}
+        className='button'
         onClick={() => {
           clearWM()
           hiddenRef.current = createWmSingle({
@@ -28,7 +28,7 @@ const CreateWmSingle = ({ }: CreateWmSingleProps) => {
         Single Watermark
       </button>
       <button
-        className={styles.btn}
+        className='button'
         onClick={clearWM}
       >
         Remove

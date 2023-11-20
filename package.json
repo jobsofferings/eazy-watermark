@@ -7,6 +7,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "homepage": "https://github.com/jobsofferings/eazy-watermark",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
@@ -15,12 +16,14 @@
     "build": "rm -rf lib && tsc -p ./tsconfig.build.json",
     "start": "dumi dev",
     "test": "jest",
+    "docs:build": "dumi build --config .dumirc.js",
     "test-coverage": "jest --collectCoverage",
     "preversion": "npm run format && npm run lint && npm run test",
     "version": "npm run build",
     "postversion": "git push && git push --tags",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
-    "lint": "eslint --ext .ts src"
+    "lint": "eslint --ext .ts src",
+    "deploy": "gh-pages -d dist"
   },
   "lint-staged": {
     "src/**/*.ts": [
@@ -28,9 +31,6 @@
       "prettier --parser=typescript --write"
     ]
   },
-  "files": [
-    "lib"
-  ],
   "keywords": [
     "watermark",
     "typescript",
@@ -45,15 +45,16 @@
     "@types/node": "^14.0.14",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
-    "eslint": "^7.12.1",
-    "eslint-config-prettier": "^6.15.0",
-    "husky": "^4.3.0",
-    "jest": "^26.1.0",
     "@umijs/fabric": "^2.8.1",
     "@umijs/plugin-esbuild": "^1.4.1",
     "@umijs/test": "^3.0.5",
-    "father-build": "^1.17.2",
     "dumi": "^1.1.38",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "father-build": "^1.17.2",
+    "gh-pages": "^6.0.0",
+    "husky": "^4.3.0",
+    "jest": "^26.1.0",
     "jest-canvas-mock": "^2.5.2",
     "lint-staged": "^10.5.1",
     "nodemon": "^3.0.1",
