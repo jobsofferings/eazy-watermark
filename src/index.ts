@@ -90,12 +90,13 @@ const createWmSingle = ({
   textAlign = 'center',
   textBaseline = 'middle',
   font = "13px Microsoft Yahei",
-  fillStyle = 'rgba(185, 193, 202, 0.2)',
+  fillStyle = 'rgba(185, 193, 202)',
   text = '',
   rotate = -20,
   zIndex = 10000,
   onCreated,
   onDestory,
+  opacity = 0.3,
 }: DefaultCreateWmProps = {}) => {
 
   const destroy = defaultCreateWm({
@@ -109,6 +110,7 @@ const createWmSingle = ({
     text,
     rotate,
     zIndex,
+    opacity,
   })
 
   onCreated && onCreated();

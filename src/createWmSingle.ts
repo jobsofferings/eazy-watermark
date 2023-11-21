@@ -3,6 +3,7 @@ export interface BaseCreateWmProps {
   width?: number;
   height?: number;
   zIndex?: number;
+  opacity?: number;
 }
 
 export interface DefaultCreateWmProps extends BaseCreateWmProps {
@@ -25,12 +26,13 @@ export const defaultCreateWm = ({
   textAlign = 'center',
   textBaseline = 'middle',
   font = "12px Microsoft Yahei",
-  fillStyle = 'rgba(185, 193, 202, 0.15)',
+  fillStyle = 'rgb(185, 193, 202)',
   text = "",
   rotate = -20,
   zIndex = 10000,
   top = "0px",
   left = "0px",
+  opacity = 0.3,
 }: DefaultCreateWmProps = {}) => {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('width', `${width}px`);
@@ -40,7 +42,7 @@ export const defaultCreateWm = ({
   ctx.textBaseline = textBaseline as CanvasTextBaseline;
   ctx.font = font;
   ctx.fillStyle = fillStyle;
-
+  ctx.globalAlpha = opacity ?? 0.3;
   ctx.rotate(rotate * Math.PI / 180);
   ctx.fillText(text, Number(width) / 2, Number(height) / 2);
 
@@ -107,6 +109,7 @@ export const createImageWm = async ({
   },
   image = 'https://p26-passport.byteacctimg.com/img/user-avatar/ad3381e4ebb759a50f890c5fa0e2f440~300x300.awebp',
   imageClass = '',
+  opacity = 0.3,
 }: CreateImageWmProps = {}) => {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('width', `${width}px`);
@@ -129,7 +132,7 @@ export const createImageWm = async ({
     const img = await loadImage(image);
 
     ctx.save();
-    ctx.globalAlpha = 0.3;
+    ctx.globalAlpha = opacity ?? 0.3;
     ctx.imageSmoothingQuality = 'high';
     ctx.rotate(rotate * (Math.PI / 180));
     ctx.drawImage(img as HTMLImageElement, 0, 0, width, height);

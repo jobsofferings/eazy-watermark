@@ -1,25 +1,22 @@
 import React from 'react';
-import { createWm, createWmSingle, removeAll } from '../../src/index';
+import { createWm, removeAll } from '../../src/index';
+import { Button, Space } from 'antd';
 import '../styles/index.less';
 
 const CreateWmSingleMulti = () => {
 
   return (
-    <div className='button-area'>
-      <button
-        className='button'
+    <Space>
+      <Button
         onClick={() => {
           createWm({
             text: 'First',
-            width: 100,
-            height: 100,
           });
         }}
       >
         First Watermark
-      </button>
-      <button
-        className='button'
+      </Button>
+      <Button
         onClick={() => {
           createWm({
             text: 'Second',
@@ -29,26 +26,25 @@ const CreateWmSingleMulti = () => {
         }}
       >
         Second Watermark
-      </button>
-      <button
-        className='button'
+      </Button>
+      <Button
         onClick={() => {
           createWm({
             text: 'Third',
-            width: 300,
-            height: 300,
+            width: 100,
+            height: 100,
           });
         }}
       >
         Third Watermark
-      </button>
-      <button
-        className='button'
+      </Button>
+      <Button
+        type='primary'
         onClick={removeAll}
       >
         Remove All
-      </button>
-    </div>
+      </Button>
+    </Space>
   )
 }
 
