@@ -1,12 +1,15 @@
 import React, { Fragment, useState } from 'react';
-import { createWmSingle } from '../../src/index';
-import { Button, Row, Slider, Space } from 'antd';
+import { createWmSingle, DefaultCreateWmProps } from '../../src/index';
+import { Button, Input, Row, Slider, Space } from 'antd';
 import '../styles/index.less';
 
 const CreateWmSingle = () => {
 
   const hiddenRef = React.useRef<any>(null);
-  const [slider, setSlider] = useState(30)
+  const [params, setParams] = useState<DefaultCreateWmProps>({
+    text: 'Single',
+    opacity: 0.3,
+  })
 
   const clearWM = () => {
     if (hiddenRef.current && typeof hiddenRef.current === 'function') {
@@ -21,10 +24,7 @@ const CreateWmSingle = () => {
         <Button
           onClick={async () => {
             clearWM()
-            hiddenRef.current = createWmSingle({
-              text: 'Single',
-              opacity: slider / 100,
-            });
+            hiddenRef.current = createWmSingle(params);
           }}
         >
           Single Watermark
@@ -36,20 +36,39 @@ const CreateWmSingle = () => {
           Remove
         </Button>
       </Space>
-      <Row align='middle' style={{ marginTop: 32 }}>
-        <div style={{ fontWeight: 'bold' }}>opacity rate: </div>
-        <Slider
+      <Row align='middle' style={{ marginTop: 16 }}>
+        <div style={{ fontWeight: 'bold', marginRight: 16 }}>Text: </div>
+        <Input
           style={{ width: 200 }}
-          value={slider}
-          onChange={async (value) => {
+          value={params.text}
+          onChange={(e) => {
+            const paramsFormated = {
+              ...params,
+              text: e.target.value
+            }
             if (hiddenRef.current) {
               clearWM()
-              hiddenRef.current = await createWmSingle({
-                text: 'Single',
-                opacity: value / 100,
-              })
+              hiddenRef.current = createWmSingle(paramsFormated)
             }
-            setSlider(value)
+            setParams(paramsFormated)
+          }}
+        />
+      </Row>
+      <Row align='middle' style={{ marginTop: 16 }}>
+        <div style={{ fontWeight: 'bold', marginRight: 16 }}>Opacity Rate: </div>
+        <Slider
+          style={{ width: 200 }}
+          value={params.opacity ? params.opacity * 100 : 30}
+          onChange={async (value) => {
+            const paramsFormated = {
+              ...params,
+              opacity: value / 100,
+            }
+            if (hiddenRef.current) {
+              clearWM()
+              hiddenRef.current = await createWmSingle(paramsFormated)
+            }
+            setParams(paramsFormated)
           }}
           tooltip={{
             formatter(value) {
